@@ -17,7 +17,7 @@ GildenSteuerSettings.AceConfig = {
 			descStyle = "inline";
 			min = 0;
 			max = 1;
-			step = 0.05;
+			step = 0.01;
 			set = function(info, val) GildenSteuer.db.char.rate = val end;
 			get = function(info) return GildenSteuer.db.char.rate end;
 			isPercent = true;

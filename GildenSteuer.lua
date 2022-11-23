@@ -21,7 +21,7 @@ local DEFAULTS = {
 		direct = true,
 	},
 	char = {
-		rate = 0.10,
+		rate = 0.01,
 	},
 }
 
