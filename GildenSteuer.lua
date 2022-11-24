@@ -646,7 +646,7 @@ end
 
 function GildenSteuer:PLAYER_ENTERING_WORLD( ... )
 	self.GUI:Create()
-
+	self:Debug("Pself.GUI:Create()")
 	self:UpdatePlayerName()
 	self:UpdatePlayerMoney()
 	self:UpdateGuildInfo()
