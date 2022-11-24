@@ -693,21 +693,24 @@ function GildenSteuer:PLAYER_MONEY( ... )
 end
 
 function GildenSteuer:GUILDBANKBAGSLOTS_CHANGED( ... )
-	self:Debug("Guild bank opened")
-	self.isBankOpened = true
 
-	if self.isReady then
-		local tax = floor(self:GetTax())
-		if tax >= 1 and self.db.profile.autopay then
-			self:PayTax()
+	if self.isBankOpened == false then
+		self:Debug("Guild bank opened")
+		self.isBankOpened = true
+
+		if self.isReady then
+			local tax = floor(self:GetTax())
+			if tax >= 1 and self.db.profile.autopay then
+				self:PayTax()
+			else
+				self:PrintTax()
+			end
+			if self.db.profile.direct then
+				self.isPayingTax = true
+			end
 		else
-			self:PrintTax()
+			self:PrintNotReady()
 		end
-		if self.db.profile.direct then
-			self.isPayingTax = true
-		end
-	else
-		self:PrintNotReady()
 	end
 
 end
@@ -717,10 +720,19 @@ function GildenSteuer:MAIL_SHOW( ... )
 	self.isMailOpened = true
 end
 
-function GildenSteuer:MAIL_CLOSED( ... )
-	if self.isMailOpened then
-		self:Debug("Mailbox closed")
-		self.isMailOpened = false
+function GildenSteuer:PLAYER_INTERACTION_MANAGER_FRAME_HIDE( event, ...  )
+	local panelType = ...
+	if panelType == Enum.PlayerInteractionType.GuildBanker  then
+		if self.isBankOpened then
+			self:Debug("GuildBanker closed")
+			self.isBankOpened = false
+		end
+	end
+	if panelType == Enum.PlayerInteractionType.MailInfo then
+		if self.isMailOpened then
+			self:Debug("Mailbox closed")
+			self.isMailOpened = false
+		end
 	end
 end
 
@@ -763,6 +775,6 @@ GildenSteuer:RegisterEvent("PLAYER_ENTERING_WORLD")
 GildenSteuer:RegisterEvent("PLAYER_MONEY")
 GildenSteuer:RegisterEvent("GUILDBANKBAGSLOTS_CHANGED")
 GildenSteuer:RegisterEvent("MAIL_SHOW")
-GildenSteuer:RegisterEvent("MAIL_CLOSED")
+GildenSteuer:RegisterEvent("PLAYER_INTERACTION_MANAGER_FRAME_HIDE")
 GildenSteuer:RegisterEvent("PLAYER_GUILD_UPDATE")
 GildenSteuer:RegisterEvent("GUILD_ROSTER_UPDATE")
