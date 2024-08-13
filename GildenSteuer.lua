@@ -45,6 +45,7 @@ function GildenSteuer:OnInitialize()
 	self.numberMembers = nil
 	self.numberMembersOnline = nil
 	self.isMailOpened = false
+	self.isGuildBankOpened = false
 	self.isBankOpened = false
 	self.isPayingTax = false
 	self.isReady = false
@@ -84,7 +85,7 @@ function GildenSteuer:PrintTax()
 	local message
 	if self:GetTax() >= 1 then
 		message = format(GT_CHAT_TAX, self:FormatMoney(self:GetTax()))
-		if (self.isBankOpened and not self.db.profile.autopay) then
+		if (self.isGuildBankOpened and not self.db.profile.autopay) then
 			message = message .. " |Hitem:GildenSteuer:create:|h|cffff8000[" .. GT_CHAT_TAX_CLICK .. "]|r|h"
 		end
 	else
@@ -313,6 +314,7 @@ end
 function GildenSteuer:AccrueTax(income, tax)
 	self:Debug("Accrue tax with " .. tax)
 	self.db.char[self.guildId].tax = self:GetTax() + tax
+	self:Debug("Total tax  " .. self:GetTax())
 	self:PrintTransaction(income, tax)
 	self.GUI:UpdatePayedStatus()
 end
@@ -325,7 +327,7 @@ end
 
 function GildenSteuer:PayTax()
 	self:Debug("Paying tax")
-	if not self.isBankOpened then
+	if not self.isGuildBankOpened then
 		self:Print(GT_CHAT_OPEN_BANK)
 		return
 	end
@@ -672,13 +674,15 @@ function GildenSteuer:PLAYER_MONEY( ... )
 		elseif self.isMailOpened then
 			self:Debug("Mailbox is open, transaction ignored")
 		elseif self.isBankOpened then
+			self:Debug("Bank is open, transaction ignored")
+		elseif self.isGuildBankOpened then
 			self:Debug("Guild bank is open, transaction ignored")
 		else
 			self:AccrueTax(delta, delta * self.db.char.rate)
 			self:NotifyStatus(self.playerName)
 		end
 
-	elseif self.isBankOpened and self.isPayingTax then
+	elseif self.isGuildBankOpened and self.isPayingTax then
 		self:ReduceTax(-delta)
 		self.isPayingTax = false
 		self:PrintTax()
@@ -694,9 +698,9 @@ end
 
 function GildenSteuer:GUILDBANKBAGSLOTS_CHANGED( ... )
 
-	if self.isBankOpened == false then
+	if self.isGuildBankOpened == false then
 		self:Debug("Guild bank opened")
-		self.isBankOpened = true
+		self.isGuildBankOpened = true
 
 		if self.isReady then
 			local tax = floor(self:GetTax())
@@ -720,12 +724,22 @@ function GildenSteuer:MAIL_SHOW( ... )
 	self.isMailOpened = true
 end
 
+function GildenSteuer:BANKFRAME_OPENED( ... )
+	self:Debug("Bank opened")
+	self.isBankOpened = true
+end
+
+function GildenSteuer:BANKFRAME_CLOSED( ... )
+	self:Debug("Bank closed")
+	self.isBankOpened = false
+end
+
 function GildenSteuer:PLAYER_INTERACTION_MANAGER_FRAME_HIDE( event, ...  )
 	local panelType = ...
 	if panelType == Enum.PlayerInteractionType.GuildBanker  then
-		if self.isBankOpened then
+		if self.isGuildBankOpened then
 			self:Debug("GuildBanker closed")
-			self.isBankOpened = false
+			self.isGuildBankOpened = false
 		end
 	end
 	if panelType == Enum.PlayerInteractionType.MailInfo then
@@ -775,6 +789,8 @@ GildenSteuer:RegisterEvent("PLAYER_ENTERING_WORLD")
 GildenSteuer:RegisterEvent("PLAYER_MONEY")
 GildenSteuer:RegisterEvent("GUILDBANKBAGSLOTS_CHANGED")
 GildenSteuer:RegisterEvent("MAIL_SHOW")
+GildenSteuer:RegisterEvent("BANKFRAME_OPENED")
+GildenSteuer:RegisterEvent("BANKFRAME_CLOSED")																			
 GildenSteuer:RegisterEvent("PLAYER_INTERACTION_MANAGER_FRAME_HIDE")
 GildenSteuer:RegisterEvent("PLAYER_GUILD_UPDATE")
 GildenSteuer:RegisterEvent("GUILD_ROSTER_UPDATE")
