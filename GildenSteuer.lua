@@ -1,6 +1,6 @@
 local VERSION = "3.2"
 local DEVELOPMENT = false
-local SLASH_COMMAND = "gt"
+local SLASH_COMMAND = "ogt"
 local MESSAGE_PREFIX = "GT"
 local REFRESH_ALL_PERIOD = 1 * 60
 local REFRESH_PLAYER_STATUS_PERIOD = 3 * 60 * 60
@@ -275,6 +275,7 @@ function GildenSteuer:UpdatePlayerName()
 end
 
 function GildenSteuer:UpdatePlayerMoney(playerMoney)
+self:Debug("UpdatePlayerMoney ")
 	if not playerMoney then
 		playerMoney = GetMoney()
 	end
@@ -317,6 +318,7 @@ function GildenSteuer:AccrueTax(income, tax)
 	self:Debug("Total tax  " .. self:GetTax())
 	self:PrintTransaction(income, tax)
 	self.GUI:UpdatePayedStatus()
+	self:UpdatePlayerMoney()
 end
 
 function GildenSteuer:ReduceTax(tax)
