@@ -1,6 +1,6 @@
 local VERSION = "3.2"
 local DEVELOPMENT = false
-local SLASH_COMMAND = "ogt"
+local SLASH_COMMAND = "gt"
 local MESSAGE_PREFIX = "GT"
 local REFRESH_ALL_PERIOD = 1 * 60
 local REFRESH_PLAYER_STATUS_PERIOD = 3 * 60 * 60
@@ -314,6 +314,9 @@ end
 
 function GildenSteuer:AccrueTax(income, tax)
 	self:Debug("Accrue tax with " .. tax)
+	if(self:getTax()<0) then
+		self.db.char[self.guildId].tax = 0
+	end
 	self.db.char[self.guildId].tax = self:GetTax() + tax
 	self:Debug("Total tax  " .. self:GetTax())
 	self:PrintTransaction(income, tax)
