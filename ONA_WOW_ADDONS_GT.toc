@@ -3,7 +3,7 @@
 ## Notes: 
 ## Author: BloodDragon2580
 ## Version: 3.8
-## SavedVariables: OnaGildenSteuerDB
+## SavedVariables: Ona_GildenSteuerDB
 
 
 embeds.xml
