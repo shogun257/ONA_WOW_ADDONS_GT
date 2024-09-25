@@ -1,8 +1,8 @@
 ## Interface: 100002
 ## Title:|ONA_GildenSteuer|r
 ## Notes: 
-## Author: BloodDragon2580
-## Version: 3.8
+## Author: Shogun
+## Version: 6
 ## SavedVariables: Ona_GildenSteuerDB
 
 

@@ -1,4 +1,4 @@
-local VERSION = "4"
+local VERSION = "6"
 local DEVELOPMENT = false
 local SLASH_COMMAND = "ONAgt"
 local MESSAGE_PREFIX = "ONAGT"
