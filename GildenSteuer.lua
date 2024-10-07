@@ -1,4 +1,4 @@
-local VERSION = "6"
+local VERSION = "6.1"
 local DEVELOPMENT = false
 local SLASH_COMMAND = "ONAgt"
 local MESSAGE_PREFIX = "ONAGT"
@@ -15,13 +15,13 @@ local DEFAULTS = {
 	profile = {
 		version = 0,
 		debug = false,
-		verbose = false,
+		verbose = true,
 		logging = true,
 		autopay = true,
 		direct = false,
 	},
 	char = {
-		rate = 0.01,
+		rate = 0.05,
 	},
 }
 
@@ -33,7 +33,7 @@ getmetatable(GildenSteuer).__tostring = function (self)
 end
 
 function GildenSteuer:OnInitialize()
-	self.db = LibStub("AceDB-3.0"):New("GildenSteuerDB", DEFAULTS, true)
+	self.db = LibStub("AceDB-3.0"):New("OnaGildenSteuerDB", DEFAULTS, true)
 
 	self.playerName = nil
 	self.playerRealm = nil

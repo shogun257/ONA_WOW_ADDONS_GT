@@ -2,8 +2,8 @@
 ## Title:|ONA_GildenSteuer|r
 ## Notes: 
 ## Author: Shogun
-## Version: 6
-## SavedVariables: Ona_GildenSteuerDB
+## Version: 6.1
+## SavedVariables: OnaGildenSteuerDB
 
 
 embeds.xml

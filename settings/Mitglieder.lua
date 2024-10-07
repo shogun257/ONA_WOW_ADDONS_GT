@@ -51,7 +51,10 @@ local function PrepareData(self)
 
 	for i, v in ipairs(self.data) do
 		if not onlineOnly or v.online then
+		
+			if v.rate then
 			prepared[#prepared + 1] = v
+			end
 		end
 	end
 
