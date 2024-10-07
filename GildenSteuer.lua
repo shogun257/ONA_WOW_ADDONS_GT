@@ -175,12 +175,17 @@ function GildenSteuer:GetStatus(playerName)
 	local status = {}
 
 	if playerName == GildenSteuer.playerName then
+		self:Debug("Update for Avtive Player ")
 		status.version = C_AddOns.GetAddOnMetadata("ONA_WOW_ADDONS_GT", "Version")
+		self:Debug("Version " .. status.version)
 		status.timestamp = time()
 		status.rate = GildenSteuer:GetRate()
 		status.tax = GildenSteuer:GetTax()
 		status.updated = time()
 	else
+		self:Debug("Update for Other Player ")
+		self:Debug(playerName .. " != " ..GildenSteuer.playerName)
+		
 		local playerStatus = statusDB[playerName]
 		if not playerStatus then
 			statusDB[playerName] = {}
