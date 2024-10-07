@@ -1,4 +1,4 @@
-local VERSION = "6.1"
+local VERSION = "6.2"
 local DEVELOPMENT = false
 local SLASH_COMMAND = "ONAgt"
 local MESSAGE_PREFIX = "ONAGT"
@@ -175,7 +175,7 @@ function GildenSteuer:GetStatus(playerName)
 	local status = {}
 
 	if playerName == GildenSteuer.playerName then
-		status.version = C_AddOns.GetAddOnMetadata("GildenSteuer", "Version")
+		status.version = C_AddOns.GetAddOnMetadata("ONA_WOW_ADDONS_GT", "Version")
 		status.timestamp = time()
 		status.rate = GildenSteuer:GetRate()
 		status.tax = GildenSteuer:GetTax()
@@ -270,6 +270,7 @@ end
 
 function GildenSteuer:UpdatePlayerName()
 	self.playerName = UnitName("player")
+	GildenSteuer.playerName = UnitName("player")
 	self.playerRealm = GetRealmName()
 	self.playerFullName = self.playerName .. "-" .. self.playerRealm
 end
